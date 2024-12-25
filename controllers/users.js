@@ -1,5 +1,6 @@
 import { pool } from "../database.js/db.js";
 
+// create schools
 export const createSchools = async (req, res) => {
   try {
     const { school_name, address, contact_no, contact_email } = req.body;
@@ -13,6 +14,7 @@ export const createSchools = async (req, res) => {
   }
 };
 
+// get all schools
 export const getSchools = async (req, res) => {
   try {
     const body = await pool.query("SELECT * FROM schools");
@@ -24,6 +26,7 @@ export const getSchools = async (req, res) => {
   }
 };
 
+// get school by id
 export const getSchoolById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -40,6 +43,7 @@ export const getSchoolById = async (req, res) => {
   }
 };
 
+// update school
 export const updateSchool = async (req, res) => {
   try {
     const { id } = req.params;
@@ -57,6 +61,7 @@ export const updateSchool = async (req, res) => {
   }
 };
 
+// delete school
 export const deleteSchool = async (req, res) => {
   try {
     const { id } = req.params;
