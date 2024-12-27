@@ -33,7 +33,10 @@ export const getSingleStudent = async (req, res) => {
       "select * from student where student_id = $1",
       [id]
     );
-    res.status(200).json(students.rows);
+    if (students.rows.length === 0) {
+      return res.status(404).json({ message: "no records found" });
+    }
+    res.status(200).json(students.rows[0]);
   } catch (err) {
     res
       .status(500)
