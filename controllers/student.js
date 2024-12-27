@@ -1,6 +1,6 @@
 import { pool } from "../database.js/db.js";
 
-export const cerateStudent = async (req, res) => {
+export const createStudent = async (req, res) => {
   try {
     const { user_id, school_id } = req.body;
     const newStudent = await pool.query(

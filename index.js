@@ -4,6 +4,7 @@ import cors from "cors";
 
 import school from "./routes/school.js";
 import user from "./routes/users.js";
+import student from "./routes/students.js";
 dotenv.config();
 
 const app = express();
@@ -15,10 +16,11 @@ app.use(express.json());
 // API Routes
 app.use("/user", user);
 app.use("/school", school);
+app.use("/student", student);
 
 // Start the server
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
