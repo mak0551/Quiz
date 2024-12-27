@@ -67,7 +67,7 @@ export const deleteTeacher = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedTeacher = await pool.query(
-      "delete from teacher where teacher_id = $1",
+      "delete from teacher where teacher_id = $1 returning *",
       [id]
     );
     if (deletedTeacher.rowCount === 0) {
