@@ -5,7 +5,7 @@ import {
   getSchoolById,
   getSchools,
   updateSchool,
-} from "../controllers/users.js";
+} from "../controllers/school.js";
 const router = express.Router();
 
 router.post("/create", createSchools);
