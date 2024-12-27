@@ -69,7 +69,7 @@ export const deleteSchool = async (req, res) => {
       "DELETE FROM schools WHERE school_id = $1 RETURNING *",
       [id]
     );
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: "School not found" });
     }
     res.status(204).json({ message: "school deleted successfully" });

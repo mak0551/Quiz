@@ -60,4 +60,20 @@ export const updateStudent = async (req, res) => {
   }
 };
 
-export const deleteStudent = async (req, res) => {};
+export const deleteStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedStudent = await pool.query(
+      "delete from student where student_id = $1",
+      [id]
+    );
+    if (deletedStudent.rowCount === 0) {
+      return res.status(404).json({ message: "student not found to delete" });
+    }
+    res.status(200).json({ message: "deleted successfully" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Internal server errror", message: err.message });
+  }
+};
