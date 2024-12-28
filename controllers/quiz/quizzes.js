@@ -58,7 +58,7 @@ export const UpdateQuizz = async (req, res) => {
     if (quiz.rows.length === 0) {
       return res.status(404).json({ message: "no records found" });
     }
-    res.status(200).json(quiz.rows);
+    res.status(200).json(quiz.rows[0]);
   } catch (err) {
     res
       .status(500)
@@ -74,7 +74,7 @@ export const deleteQuizz = async (req, res) => {
       [id]
     );
     if (deletedQuiz.rowCount === 0) {
-      return res.status(404).json({ message: "no records found" });
+      return res.status(404).json({ message: "no records found to delete" });
     }
     res.status(200).json(deletedQuiz);
   } catch (err) {
