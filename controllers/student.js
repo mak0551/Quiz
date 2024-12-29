@@ -7,7 +7,7 @@ export const createStudent = async (req, res) => {
       "insert into student(user_id, school_id) values ($1,$2) returning *",
       [user_id, school_id]
     );
-    res.status(200).json(newStudent);
+    res.status(200).json(newStudent.rows);
   } catch (err) {
     res
       .status(500)

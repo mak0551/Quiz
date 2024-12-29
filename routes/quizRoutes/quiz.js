@@ -29,7 +29,7 @@ router.post("/question/create", addQuestion);
 
 router.get("/question/getwithanswers", getAllQuestionsWithAnswers);
 
-router.get("/question/getonlyquestion", getOnlyQuestions);
+router.get("/question/getonlyquestions", getOnlyQuestions);
 
 router.get("/question/getbyid/:id", getQuestionById);
 
