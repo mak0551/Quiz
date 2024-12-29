@@ -7,7 +7,7 @@ export const createTeacher = async (req, res) => {
       "insert into teacher(user_id, school_id) values($1,$2) returning *",
       [user_id, school_id]
     );
-    res.status(200).json(teacher);
+    res.status(200).json(teacher.rows);
   } catch (err) {
     res
       .status(500)
@@ -28,9 +28,9 @@ export const getAllTeachers = async (req, res) => {
 
 export const getSingleTeacher = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const teacher = await pool.query(
-      "select * from teacher where teacher_id = $1",
+      "select * from teacher where teacher_id = $1 ",
       [id]
     );
     if (teacher.rows.length === 0) {
@@ -47,15 +47,23 @@ export const getSingleTeacher = async (req, res) => {
 export const updateTeacher = async (req, res) => {
   try {
     const { id } = req.params;
-    const { user_id, school_id } = req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.values(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((key, index) => `${key} = $${index + 1}`)
+      .join(",");
     const updatedTeacher = await pool.query(
-      " update teacher set user_id = $1, school_id = $2 returning *",
-      [user_id, school_id]
+      `update teacher set ${setQuery} where teacher_id = $${
+        body_keys.length + 1
+      } returning *`,
+      values
     );
     if (updatedTeacher.rows.length === 0) {
       return res.status(404).json({ message: "no records found" });
     }
-    res.status(200).json(updatedTeacher);
+    res.status(200).json(updatedTeacher.rows);
   } catch (err) {
     res
       .status(500)
