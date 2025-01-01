@@ -84,34 +84,23 @@ export const getQuestionById = async (req, res) => {
 export const updateQuestion = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      quiz_id,
-      question_text,
-      option_a,
-      option_b,
-      option_c,
-      option_d,
-      correct_option,
-      category,
-    } = req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.keys(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((keys, index) => `${keys} = $${index + 1}`)
+      .join(",");
     const updatedquestion = await pool.query(
-      "update questions set quiz_id = $1, question_text = $2, option_a = $3, option_b = $4, option_c = $5, option_d = $6, correct_option = $7, category = $8 where question_id = $9 returning *",
-      [
-        quiz_id,
-        question_text,
-        option_a,
-        option_b,
-        option_c,
-        option_d,
-        correct_option,
-        category,
-        id,
-      ]
+      `update questions set ${setQuery} where question_id = $${
+        values.length + 1
+      } returning *`,
+      values
     );
     if (updatedquestion.rows.length === 0) {
       return res.status(404).json({ message: "no records found" });
     }
-    res.status(200).json(updatedquestion);
+    res.status(200).json(updatedquestion.rows[0]);
   } catch (err) {
     res
       .status(500)
@@ -188,10 +177,18 @@ export const getSingleQuizz = async (req, res) => {
 export const UpdateQuizz = async (req, res) => {
   try {
     const { id } = req.params;
-    const { quiz_title, description, teacher_id } = req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.keys(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((keys, index) => `${keys} = $${index + 1}`)
+      .join(",");
     const quiz = await pool.query(
-      "update quizzes set quiz_title = $1, description = $2, teacher_id =$3 where quizzes_id = $4 returning *",
-      [quiz_title, description, teacher_id, id]
+      `update quizzes set ${setQuery} where quizzes_id = $${
+        values.length + 1
+      } returning *`,
+      values
     );
     if (quiz.rows.length === 0) {
       return res.status(404).json({ message: "no records found" });
@@ -273,10 +270,18 @@ export const getSingleStudentQuiz = async (req, res) => {
 export const UpdateStudentQuiz = async (req, res) => {
   try {
     const { id } = req.params;
-    const { student_id, quiz_id, score, completed_at } = req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.keys(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((keys, index) => `${keys} = $${index + 1}`)
+      .join(",");
     const student_quiz = await pool.query(
-      "update student_quiz set student_id = $1, quiz_id = $2, score =$3 , completed_at= $4 where student_quiz_id = $5 returning *",
-      [student_id, quiz_id, score, completed_at, id]
+      `update student_quiz set ${setQuery} where student_quiz_id = $${
+        values.length + 1
+      } returning *`,
+      values
     );
     if (student_quiz.rows.length === 0) {
       return res.status(404).json({ message: "no records found" });
@@ -361,11 +366,18 @@ export const getSingleStudentQuizDetails = async (req, res) => {
 export const UpdateStudentQuizDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    const { studentquiz_id, question_id, selected_option, is_correct } =
-      req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.keys(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((keys, index) => `${keys} = $${index + 1}`)
+      .join(",");
     const student_quiz_details = await pool.query(
-      "update student_quiz_details set studentquiz_id = $1, question_id = $2, selected_option = $3, is_correct = $4 where student_quiz_details_id = $5 returning *",
-      [studentquiz_id, question_id, selected_option, is_correct, id]
+      `update student_quiz_details set ${setQuery} where student_quiz_details_id = $${
+        values.length + 1
+      } returning *`,
+      values
     );
     if (student_quiz_details.rows.length === 0) {
       return res.status(404).json({ message: "no records found" });

@@ -47,10 +47,18 @@ export const getSingleStudent = async (req, res) => {
 export const updateStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { user_id, school_id } = req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.keys(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((keys, index) => `${keys} = $${index + 1}`)
+      .join(",");
     const updatedStudent = await pool.query(
-      "update student set user_id= $1, school_id= $2 where student_id= $3 RETURNING *",
-      [user_id, school_id, id]
+      `update student set ${setQuery} where student_id= $${
+        values.length + 1
+      } RETURNING *`,
+      values
     );
     if (updatedStudent.rows.length === 0) {
       return res.status(404).json({ error: "no records found" });

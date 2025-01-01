@@ -47,10 +47,18 @@ export const getSchoolById = async (req, res) => {
 export const updateSchool = async (req, res) => {
   try {
     const { id } = req.params;
-    const { school_name, address, contact_no, contact_email } = req.body;
+    const body = req.body;
+    const body_keys = Object.keys(body);
+    const body_values = Object.keys(body);
+    const values = [...body_values, id];
+    const setQuery = body_keys
+      .map((keys, index) => `${keys} = $${index + 1}`)
+      .join(",");
     const result = await pool.query(
-      "UPDATE schools SET school_name = $1, address = $2, contact_number = $3, contact_email = $4 WHERE school_id = $5 RETURNING *",
-      [school_name, address, contact_no, contact_email, id]
+      `UPDATE schools SET ${setQuery} WHERE school_id = $${
+        values.length + 1
+      } RETURNING *`,
+      values
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "School not found" });
