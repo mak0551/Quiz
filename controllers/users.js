@@ -1,7 +1,7 @@
 import { pool } from "../database.js/db.js";
 import bcrypt from "bcrypt";
 
-// register user
+// register/signup user
 export const register = async (req, res) => {
   try {
     const { username, email, password, school_id, role } = req.body;
